@@ -36,13 +36,9 @@ class _LayoutScreenState extends State<LayoutScreen> {
   List<String> titles = ["Tasks Screen", "Done Screen", "Archive Screen"];
   int currentIndex = 0;
   Database? dataBase;
-  var scaffoldKey = GlobalKey<ScaffoldState>();
-  var formKey = GlobalKey<FormState>();
-  TextEditingController tasks = TextEditingController();
-  TextEditingController time = TextEditingController();
-  TextEditingController date = TextEditingController();
+  var scaffoldKey = GlobalKey<ScaffoldState>(),formKey = GlobalKey<FormState>();
+  TextEditingController tasks = TextEditingController(),time = TextEditingController(),date = TextEditingController();
   bool isBottomSheetShow = false;
-
   IconData isIcon = Icons.edit;
 
   @override
