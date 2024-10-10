@@ -51,14 +51,49 @@ Widget defaultTextFormField({
         prefixIcon: Icon(prefixIcon),
         suffixIcon: isSuffix
             ? IconButton(
-          onPressed: iconButtonFunction,
-          icon: Icon(suffixIcon),
-        )
+                onPressed: iconButtonFunction,
+                icon: Icon(suffixIcon),
+              )
             : null,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.all(
             Radius.circular(radius),
           ),
         ),
+      ),
+    );
+
+Widget buildTaskItem(Map task) => Padding(
+      padding: const EdgeInsets.all(20.0),
+      child: Row(
+        children: [
+          CircleAvatar(
+            radius: 40,
+            backgroundColor: Colors.blue,
+            child: Text(
+              task['time'],
+              style: const TextStyle(color: Colors.white, fontSize: 15),
+            ),
+          ),
+          const SizedBox(
+            width: 15,
+          ),
+          Column(
+            children: [
+              Text(
+                task['title'],
+                style: const TextStyle(
+                  color: Colors.black,
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Text(
+                task['date'],
+                style: const TextStyle(color: Colors.grey, fontSize: 18),
+              ),
+            ],
+          )
+        ],
       ),
     );
