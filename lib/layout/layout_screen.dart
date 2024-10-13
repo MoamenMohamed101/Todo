@@ -31,8 +31,9 @@ class _LayoutScreenState extends State<LayoutScreen> {
     ),
   ];
 
-  List<Widget> screens = [
-    const TasksScreen(),
+  List<Map> tasks = [];
+  late List<Widget> screens = [
+    TasksScreen(tasks),
     const DoneScreen(),
     const ArchiveScreen(),
   ];
@@ -72,11 +73,9 @@ class _LayoutScreenState extends State<LayoutScreen> {
                 date: date.text,
                 time: time.text,
               ).then((value) {
-
-                getDataBase(dataBase).then((onValue){
+                getDataBase(dataBase).then((onValue) {
                   Navigator.pop(context);
-                  setState(() {
-                  });
+                  setState(() {});
                   isBottomSheetShow = false;
                   isIcon = Icons.edit;
                   tasks = onValue;

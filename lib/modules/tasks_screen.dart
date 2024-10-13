@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:todo/shared/components/components.dart';
-import 'package:todo/shared/components/constants.dart';
 
 class TasksScreen extends StatelessWidget {
-  const TasksScreen({super.key});
+  List<Map> tasks = [];
+  TasksScreen(this.tasks, {super.key});
 
   @override
   Widget build(BuildContext context) {
