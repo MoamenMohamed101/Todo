@@ -2,7 +2,6 @@ import 'package:conditional_builder_null_safety/conditional_builder_null_safety.
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:sqflite/sqflite.dart';
 import 'package:todo/layout/layout_cubit/todo_cubit.dart';
 import 'package:todo/layout/layout_cubit/todo_states.dart';
 import 'package:todo/shared/components/components.dart';
@@ -23,26 +22,22 @@ class LayoutScreen extends StatelessWidget {
     ),
   ];
 
-  Database? dataBase;
   var scaffoldKey = GlobalKey<ScaffoldState>(),
       formKey = GlobalKey<FormState>();
   TextEditingController tasksController = TextEditingController(),
       timeController = TextEditingController(),
       dateController = TextEditingController();
 
-
   LayoutScreen({super.key});
-
-  void initState() {
-    createDataBase();
-  }
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => TodoLayoutCubit(),
-      child: BlocConsumer<TodoLayoutCubit,TodoLayoutStates>(
-        listener: (context, state) {},
+      create: (context) => TodoLayoutCubit()..createDataBase(),
+      child: BlocConsumer<TodoLayoutCubit, TodoLayoutStates>(
+        listener: (context, state) {
+          if(state is TodoLayoutInsertDataBaseSuccessState) Navigator.pop(context);
+        },
         builder: (context, state) {
           TodoLayoutCubit cubit = TodoLayoutCubit.get(context);
           return Scaffold(
@@ -56,18 +51,12 @@ class LayoutScreen extends StatelessWidget {
               onPressed: () {
                 if (cubit.isBottomSheetShow) {
                   if (formKey.currentState!.validate()) {
-                    insertDataBase(
+                    cubit
+                        .insertDataBase(
                       title: tasksController.text,
                       date: dateController.text,
                       time: timeController.text,
-                    ).then((value) {
-                      getDataBase(dataBase).then((onValue) {
-                        Navigator.pop(context);
-                        cubit.isBottomSheetShow = false;
-                        cubit.changeIcons();
-                        cubit.tasks = onValue;
-                      });
-                    });
+                    );
                   }
                 } else {
                   scaffoldKey.currentState!
@@ -173,8 +162,9 @@ class LayoutScreen extends StatelessWidget {
               currentIndex: cubit.currentIndex,
             ),
             body: ConditionalBuilder(
-              condition: true, //cubit.tasks.isNotEmpty,
-              builder: (BuildContext context) => cubit.screens[cubit.currentIndex],
+              condition: cubit.tasks.isNotEmpty,
+              builder: (BuildContext context) =>
+              cubit.screens[cubit.currentIndex],
               fallback: (BuildContext context) =>
               const Center(
                 child: CircularProgressIndicator(),
@@ -185,49 +175,6 @@ class LayoutScreen extends StatelessWidget {
       ),
     );
   }
-
-  void createDataBase() async {
-    dataBase = await openDatabase(
-      'todo.db',
-      version: 1,
-      onCreate: (dataBase, version) {
-        debugPrint("database created");
-        dataBase
-            .execute(
-            'CREATE TABLE tasks (id INTEGER PRIMARY KEY, title TEXT, date TEXT, time TEXT, status TEXT)')
-            .then((value) {
-          debugPrint("tables created");
-        }).catchError((error) {
-          debugPrint("error when creating tables: ${error.toString()}");
-        });
-      },
-      onOpen: (dataBase) {
-        getDataBase(dataBase).then((onValue) {
-          //cubit.tasks = onValue;
-        });
-        debugPrint("database opened");
-      },
-    );
-  }
-
-  Future insertDataBase({
-    required String title,
-    required String date,
-    required String time,
-  }) async {
-    return await dataBase!.transaction((action) =>
-        action
-            .rawInsert(
-            'INSERT INTO tasks (title,date,time,status) VALUES("$title","$date","$time","new")')
-            .then((value) {
-          debugPrint("$value inserted successfully");
-        }).catchError((error) {
-          debugPrint("error will inserting $error");
-        }));
-  }
-
-  Future<List<Map>> getDataBase(dataBase) async =>
-      await dataBase!.rawQuery('SELECT * FROM tasks');
 
   void updateItemDataBase() {}
 
