@@ -11,14 +11,16 @@ class TodoLayoutCubit extends Cubit<TodoLayoutStates> {
 
   static TodoLayoutCubit get(context) => BlocProvider.of(context);
 
-  List<Map> tasks = [];
+  List<Map> newTasks = [];
+  List<Map> doneTasks = [];
+  List<Map> archiveTasks = [];
   int currentIndex = 0;
   bool isBottomSheetShow = false;
   IconData isIcon = Icons.edit;
   Database? dataBase;
 
   late List<Widget> screens = [
-    TasksScreen(),
+    const TasksScreen(),
     const DoneScreen(),
     const ArchiveScreen(),
   ];
@@ -57,10 +59,7 @@ class TodoLayoutCubit extends Cubit<TodoLayoutStates> {
         });
       },
       onOpen: (dataBase) {
-        getDataBase(dataBase).then((onValue) {
-          tasks = onValue;
-          emit(TodoLayoutGetDataBaseSuccessState());
-        });
+        getDataBase(dataBase);
         debugPrint("database opened");
       },
     ).then((onValue) {
@@ -79,10 +78,7 @@ class TodoLayoutCubit extends Cubit<TodoLayoutStates> {
                 'INSERT INTO tasks (title,date,time,status) VALUES("$title","$date","$time","new")')
             .then((value) {
           debugPrint("$value inserted successfully");
-          getDataBase(dataBase).then((onValue){
-            tasks = onValue;
-            emit(TodoLayoutGetDataBaseSuccessState());
-          });
+          getDataBase(dataBase);
           emit(TodoLayoutInsertDataBaseSuccessState());
         }).catchError((error) {
           debugPrint("error will inserting $error");
@@ -90,6 +86,42 @@ class TodoLayoutCubit extends Cubit<TodoLayoutStates> {
         }));
   }
 
-  Future<List<Map>> getDataBase(dataBase) async =>
-      await dataBase!.rawQuery('SELECT * FROM tasks');
+  void getDataBase(dataBase) {
+    emit(TodoLayoutGetDataBaseLoadingState());
+    newTasks.clear();
+    doneTasks.clear();
+    archiveTasks.clear();
+    dataBase!.rawQuery('SELECT * FROM tasks').then((onValue) {
+      onValue.forEach((element) {
+        if (element['status'] == 'new') {
+          newTasks.add(element);
+        } else if (element['status'] == 'done') {
+          doneTasks.add(element);
+        } else {
+          archiveTasks.add(element);
+        }
+      });
+      emit(TodoLayoutGetDataBaseSuccessState());
+    });
+  }
+
+  void updateItemDataBase({required String status, required int id}) async {
+    dataBase!.rawUpdate(
+      'UPDATE tasks SET status = ? WHERE id = ?',
+      [status, id],
+    ).then((onValue) {
+      getDataBase(dataBase);
+      emit(TodoLayoutUpdateDataBaseSuccessState());
+    });
+  }
+
+  void deleteFromDataBase(int task) {
+    dataBase!.rawDelete(
+      'DELETE FROM tasks WHERE id = ?',
+      [task],
+    ).then((onValue){
+      getDataBase(dataBase);
+      emit(TodoLayoutDeleteDataBaseSuccessState());
+    });
+  }
 }

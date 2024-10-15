@@ -5,29 +5,22 @@ import 'package:todo/layout/layout_cubit/todo_states.dart';
 import 'package:todo/shared/components/components.dart';
 
 class TasksScreen extends StatelessWidget {
-  TasksScreen( {super.key});
+  const TasksScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<TodoLayoutCubit,TodoLayoutStates>(
+    return BlocConsumer<TodoLayoutCubit, TodoLayoutStates>(
       builder: (BuildContext context, state) {
         TodoLayoutCubit cubit = TodoLayoutCubit.get(context);
-        return ListView.separated(
+        return cubit.newTasks.isEmpty ? emptyTasks() : ListView.builder(
+          physics: const BouncingScrollPhysics(),
           itemBuilder: (BuildContext context, int index) {
-            return buildTaskItem(cubit.tasks[index]);
+            return buildTaskItem(cubit.newTasks[index], context);
           },
-          separatorBuilder: (BuildContext context, int index) => Padding(
-            padding: const EdgeInsetsDirectional.only(start: 15),
-            child: Container(
-              height: 1,
-              width: double.infinity,
-              color: Colors.grey,
-            ),
-          ),
-          itemCount: cubit.tasks.length,
+          itemCount: cubit.newTasks.length,
         );
       },
-      listener: (BuildContext context, Object? state) {  },
+      listener: (BuildContext context, Object? state) {},
     );
   }
 }

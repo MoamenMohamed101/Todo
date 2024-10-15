@@ -12,6 +12,16 @@ class TodoLayoutInsertDataBaseSuccessState extends TodoLayoutStates {}
 
 class TodoLayoutInsertDataBaseErrorState extends TodoLayoutStates {}
 
+class TodoLayoutGetDataBaseLoadingState extends TodoLayoutStates {}
+
 class TodoLayoutGetDataBaseSuccessState extends TodoLayoutStates {}
 
 class TodoLayoutGetDataBaseErrorState extends TodoLayoutStates {}
+
+class TodoLayoutUpdateDataBaseSuccessState extends TodoLayoutStates {}
+
+class TodoLayoutUpdateDataBaseErrorState extends TodoLayoutStates {}
+
+class TodoLayoutDeleteDataBaseSuccessState extends TodoLayoutStates {}
+
+class TodoLayoutDeleteDataBaseErrorState extends TodoLayoutStates {}

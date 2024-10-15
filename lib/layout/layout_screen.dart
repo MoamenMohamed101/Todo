@@ -162,7 +162,7 @@ class LayoutScreen extends StatelessWidget {
               currentIndex: cubit.currentIndex,
             ),
             body: ConditionalBuilder(
-              condition: cubit.tasks.isNotEmpty,
+              condition: state is! TodoLayoutGetDataBaseLoadingState,
               builder: (BuildContext context) =>
               cubit.screens[cubit.currentIndex],
               fallback: (BuildContext context) =>
@@ -176,7 +176,5 @@ class LayoutScreen extends StatelessWidget {
     );
   }
 
-  void updateItemDataBase() {}
 
-  void deleteFromDataBase() {}
 }
