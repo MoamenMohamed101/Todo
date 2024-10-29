@@ -71,7 +71,6 @@ class LayoutScreen extends StatelessWidget {
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 defaultTextFormField(
-                                  isObscure: false,
                                   validate: (value) {
                                     if (value!.isEmpty) {
                                       return "tasks are empty";
@@ -88,7 +87,6 @@ class LayoutScreen extends StatelessWidget {
                                   height: 15,
                                 ),
                                 defaultTextFormField(
-                                  isObscure: false,
                                   validate: (value) {
                                     if (value!.isEmpty) return "time are empty";
                                     return null;
@@ -113,7 +111,6 @@ class LayoutScreen extends StatelessWidget {
                                   height: 15,
                                 ),
                                 defaultTextFormField(
-                                  isObscure: false,
                                   onTap: () {
                                     showDatePicker(
                                       initialDate: DateTime.now(),
@@ -134,7 +131,7 @@ class LayoutScreen extends StatelessWidget {
                                   textInputType: TextInputType.datetime,
                                   prefixIcon: Icons.calendar_today,
                                   radius: 10,
-                                  hintText: "Enter your date",
+                                  hintText: "Enter your task date",
                                   controller: dateController,
                                 ),
                               ],
@@ -175,6 +172,4 @@ class LayoutScreen extends StatelessWidget {
       ),
     );
   }
-
-
 }

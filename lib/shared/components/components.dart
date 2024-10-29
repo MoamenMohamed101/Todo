@@ -26,7 +26,7 @@ Widget defaultButton({
 
 Widget defaultTextFormField({
   bool isSuffix = true,
-  bool isObscure = true,
+  bool isObscure = false,
   Function? onField,
   Function? onChanged,
   VoidCallback? iconButtonFunction,

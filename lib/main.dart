@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:todo/layout/layout_screen.dart';
-
+import 'package:todo/shared/styles/colors.dart';
 import 'shared/bloc_observer.dart';
 
 void main() {
@@ -18,9 +18,14 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
+        colorScheme: ColorScheme.fromSeed(seedColor: AppColors.primaryColorOfLight),
         useMaterial3: true,
       ),
+      darkTheme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: AppColors.primaryColorOfDark),
+        useMaterial3: true,
+      ),
+      themeMode: ThemeMode.light,
       home: LayoutScreen(),
     );
   }
