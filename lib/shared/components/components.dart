@@ -7,19 +7,23 @@ Widget defaultButton({
   double textSize = 20,
   Color color = Colors.blue,
   Color textColor = Colors.white,
+  AlignmentGeometry alignment = Alignment.center,
   required String text,
   required VoidCallback voidCall,
 }) =>
-    MaterialButton(
-      clipBehavior: Clip.antiAlias,
-      minWidth: width,
-      onPressed: voidCall,
-      color: color,
-      child: Text(
-        isUpper ? text.toUpperCase() : text,
-        style: TextStyle(
-          color: textColor,
-          fontSize: textSize,
+    Align(
+      alignment: alignment,
+      child: MaterialButton(
+        clipBehavior: Clip.antiAlias,
+        minWidth: width,
+        onPressed: voidCall,
+        color: color,
+        child: Text(
+          isUpper ? text.toUpperCase() : text,
+          style: TextStyle(
+            color: textColor,
+            fontSize: textSize,
+          ),
         ),
       ),
     );
@@ -65,9 +69,9 @@ Widget defaultTextFormField({
     );
 
 Widget buildTaskItem(Map task, BuildContext context) => Padding(
-      padding: const EdgeInsets.only(left: 20,top: 20,right: 20),
+      padding: const EdgeInsets.only(left: 20, top: 20, right: 20),
       child: Dismissible(
-        onDismissed: (element){
+        onDismissed: (element) {
           TodoLayoutCubit.get(context).deleteFromDataBase(task['id']);
         },
         key: Key(task.toString()),
@@ -140,5 +144,19 @@ Widget emptyTasks() => const Center(
             ),
           ),
         ],
+      ),
+    );
+
+void navigateAndFinish({context, widget}) => Navigator.pushAndRemoveUntil(
+    context,
+    MaterialPageRoute(
+      builder: (context) => widget,
+    ),
+    (Route<dynamic> route) => false);
+
+void navigateTo({context, widget}) => Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => widget,
       ),
     );

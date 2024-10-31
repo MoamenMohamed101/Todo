@@ -22,9 +22,9 @@ class LayoutScreen extends StatelessWidget {
     ),
   ];
 
-  var scaffoldKey = GlobalKey<ScaffoldState>(),
+  final scaffoldKey = GlobalKey<ScaffoldState>(),
       formKey = GlobalKey<FormState>();
-  TextEditingController tasksController = TextEditingController(),
+  final TextEditingController tasksController = TextEditingController(),
       timeController = TextEditingController(),
       dateController = TextEditingController();
 
@@ -36,7 +36,8 @@ class LayoutScreen extends StatelessWidget {
       create: (context) => TodoLayoutCubit()..createDataBase(),
       child: BlocConsumer<TodoLayoutCubit, TodoLayoutStates>(
         listener: (context, state) {
-          if(state is TodoLayoutInsertDataBaseSuccessState) Navigator.pop(context);
+          if (state is TodoLayoutInsertDataBaseSuccessState)
+            Navigator.pop(context);
         },
         builder: (context, state) {
           TodoLayoutCubit cubit = TodoLayoutCubit.get(context);
@@ -51,8 +52,7 @@ class LayoutScreen extends StatelessWidget {
               onPressed: () {
                 if (cubit.isBottomSheetShow) {
                   if (formKey.currentState!.validate()) {
-                    cubit
-                        .insertDataBase(
+                    cubit.insertDataBase(
                       title: tasksController.text,
                       date: dateController.text,
                       time: timeController.text,
@@ -61,8 +61,7 @@ class LayoutScreen extends StatelessWidget {
                 } else {
                   scaffoldKey.currentState!
                       .showBottomSheet(
-                        (builder) =>
-                        Container(
+                        (builder) => Container(
                           color: Colors.white,
                           padding: const EdgeInsets.all(20),
                           child: Form(
@@ -138,8 +137,8 @@ class LayoutScreen extends StatelessWidget {
                             ),
                           ),
                         ),
-                    elevation: 20,
-                  )
+                        elevation: 20,
+                      )
                       .closed
                       .then((value) {
                     cubit.isBottomSheetShow = false;
@@ -161,9 +160,8 @@ class LayoutScreen extends StatelessWidget {
             body: ConditionalBuilder(
               condition: state is! TodoLayoutGetDataBaseLoadingState,
               builder: (BuildContext context) =>
-              cubit.screens[cubit.currentIndex],
-              fallback: (BuildContext context) =>
-              const Center(
+                  cubit.screens[cubit.currentIndex],
+              fallback: (BuildContext context) => const Center(
                 child: CircularProgressIndicator(),
               ),
             ),

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:todo/layout/layout_screen.dart';
+import 'package:todo/modules/splash_screen.dart';
 import 'package:todo/shared/styles/colors.dart';
 import 'shared/bloc_observer.dart';
 
@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       themeMode: ThemeMode.light,
-      home: LayoutScreen(),
+      home: const SplashScreen(),
     );
   }
 }
