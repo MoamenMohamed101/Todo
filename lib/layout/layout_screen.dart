@@ -36,8 +36,9 @@ class LayoutScreen extends StatelessWidget {
       create: (context) => TodoLayoutCubit()..createDataBase(),
       child: BlocConsumer<TodoLayoutCubit, TodoLayoutStates>(
         listener: (context, state) {
-          if (state is TodoLayoutInsertDataBaseSuccessState)
+          if (state is TodoLayoutInsertDataBaseSuccessState) {
             Navigator.pop(context);
+          }
         },
         builder: (context, state) {
           TodoLayoutCubit cubit = TodoLayoutCubit.get(context);
@@ -46,6 +47,7 @@ class LayoutScreen extends StatelessWidget {
             appBar: AppBar(
               title: Text(
                 cubit.titles[cubit.currentIndex],
+                style: Theme.of(context).textTheme.displaySmall,
               ),
             ),
             floatingActionButton: FloatingActionButton(

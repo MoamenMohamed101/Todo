@@ -108,7 +108,7 @@ Widget onBoardingItem(
         Center(
           child: Text(
             onBoardingModel.title,
-            style: GoogleFonts.lato(fontSize: 32, fontWeight: FontWeight.w700),
+            style: Theme.of(context).textTheme.displayMedium
           ),
         ),
         const SizedBox(

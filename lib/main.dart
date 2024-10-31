@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:todo/modules/splash_screen.dart';
-import 'package:todo/shared/styles/colors.dart';
+import 'package:todo/modules/onBoarding_screens/onBoarding_screen.dart';
+import 'package:todo/shared/themes/themes.dart';
 import 'shared/bloc_observer.dart';
 
 void main() {
@@ -17,16 +17,10 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: AppColors.primaryColorOfLight),
-        useMaterial3: true,
-      ),
-      darkTheme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: AppColors.primaryColorOfDark),
-        useMaterial3: true,
-      ),
+      theme: lightTheme,
+        darkTheme: darkTheme,
       themeMode: ThemeMode.light,
-      home: const SplashScreen(),
+      home: OnboardingScreen(),
     );
   }
 }
