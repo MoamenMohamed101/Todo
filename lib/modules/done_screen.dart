@@ -13,6 +13,7 @@ class DoneScreen extends StatelessWidget {
       builder: (BuildContext context, state) {
         TodoLayoutCubit cubit = TodoLayoutCubit.get(context);
         return cubit.doneTasks.isEmpty ? emptyTasks() : ListView.builder(
+          shrinkWrap: true,
            physics: const BouncingScrollPhysics(),
           itemBuilder: (BuildContext context, int index) {
             return buildTaskItem(cubit.doneTasks[index], context);

@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-import 'package:todo/layout/layout_cubit/todo_cubit.dart';
 import 'package:todo/layout/layout_screen.dart';
 import 'package:todo/models/onBoarding_model.dart';
 import 'package:todo/shared/components/components.dart';
+import 'package:todo/shared/network/local/get_helper.dart';
+import 'package:todo/shared/network/local/shared_helper.dart';
 import 'package:todo/shared/styles/app_assets.dart';
 import 'package:todo/shared/styles/colors.dart';
 import 'package:todo/shared/styles/strings.dart';
@@ -31,8 +32,6 @@ class OnboardingScreen extends StatelessWidget {
       subTitle: AppStrings.onBoardingSubTitleThree,
     )
   ];
-
-  int value = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -70,16 +69,10 @@ Widget onBoardingItem(
                 padding: const EdgeInsets.all(30.0),
                 child: Container(),
               )
-            : TextButton(
-                child: Text(
-                  AppStrings.skip,
-                  style: GoogleFonts.lato(
-                    fontSize: 30,
-                    fontWeight: FontWeight.w400,
-                    color: AppColors.deepGrey,
-                  ),
-                ),
-                onPressed: () {
+            : commonTextButton(
+                text: AppStrings.skip,
+                textStyle: Theme.of(context).textTheme.displaySmall,
+                function: () {
                   pageController.jumpToPage(2);
                 },
               ),
@@ -106,10 +99,8 @@ Widget onBoardingItem(
           height: 50,
         ),
         Center(
-          child: Text(
-            onBoardingModel.title,
-            style: Theme.of(context).textTheme.displayMedium
-          ),
+          child: Text(onBoardingModel.title,
+              style: Theme.of(context).textTheme.displayMedium),
         ),
         const SizedBox(
           height: 42,
@@ -128,31 +119,31 @@ Widget onBoardingItem(
           children: [
             index == 0
                 ? Container()
-                : TextButton(
-                    onPressed: () {
+                : commonTextButton(
+                    text: AppStrings.back,
+                    textStyle: Theme.of(context).textTheme.displaySmall,
+                    function: () {
                       pageController.previousPage(
                         duration: const Duration(milliseconds: 500),
                         curve: Curves.fastEaseInToSlowEaseOut,
                       );
                     },
-                    child: Text(
-                      AppStrings.back,
-                      style: GoogleFonts.lato(
-                        fontSize: 25,
-                        fontWeight: FontWeight.w400,
-                        color: AppColors.deepGrey,
-                      ),
-                    ),
                   ),
             const Spacer(),
             defaultButton(
               text: index == 2 ? AppStrings.getStarted : AppStrings.next,
               voidCall: () {
                 if (index == 2) {
-                  navigateAndFinish(
-                    context: context,
-                    widget: LayoutScreen(),
-                  );
+                  getIt<SharedHelper>()
+                      .saveData(key: 'isOnBoarding', value: true)
+                      .then((onValue) {
+                    navigateAndFinish(
+                      context: context,
+                      widget: LayoutScreen(),
+                    );
+                  }).catchError((error) {
+                    debugPrint('Error saving data: $error');
+                  });
                 } else {
                   pageController.nextPage(
                     duration: const Duration(milliseconds: 500),

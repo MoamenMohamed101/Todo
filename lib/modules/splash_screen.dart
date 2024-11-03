@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:todo/modules/onBoarding_screens/onBoarding_screen.dart';
+import 'package:todo/modules/onBoarding_screen.dart';
 import 'package:todo/shared/styles/app_assets.dart';
 
 class SplashScreen extends StatefulWidget {

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:todo/layout/layout_cubit/todo_cubit.dart';
+import 'package:todo/shared/styles/app_assets.dart';
+import 'package:todo/shared/styles/strings.dart';
 
 Widget defaultButton({
   bool isUpper = true,
@@ -68,78 +70,125 @@ Widget defaultTextFormField({
       ),
     );
 
-Widget buildTaskItem(Map task, BuildContext context) => Padding(
-      padding: const EdgeInsets.only(left: 20, top: 20, right: 20),
-      child: Dismissible(
-        onDismissed: (element) {
-          TodoLayoutCubit.get(context).deleteFromDataBase(task['id']);
-        },
-        key: Key(task.toString()),
-        child: Row(
-          children: [
-            CircleAvatar(
-              radius: 40,
-              backgroundColor: Colors.blue,
-              child: Text(
-                task['time'],
-                style: const TextStyle(color: Colors.white, fontSize: 15),
-              ),
-            ),
-            const SizedBox(
-              width: 15,
-            ),
-            Expanded(
-              child: Column(
-                children: [
-                  Text(
-                    task['title'],
-                    style: const TextStyle(
-                      color: Colors.black,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
+Widget buildTaskItem(Map task, BuildContext context) => Dismissible(
+      key: Key(task.toString()),
+      onDismissed: (element) {
+        TodoLayoutCubit.get(context).deleteFromDataBase(task['id']);
+      },
+      child: Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: Card(
+          clipBehavior: Clip.antiAliasWithSaveLayer,
+          elevation: 5.0,
+          color: Colors.red,
+          child: Padding(
+            padding: const EdgeInsets.all(15.0),
+            child: Row(
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      task["title"],
+                      style:
+                          Theme.of(context).textTheme.displayMedium!.copyWith(
+                                color: Colors.white,
+                              ),
                     ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      children: [
+                        const Icon(Icons.timer_sharp, color: Colors.white),
+                        const SizedBox(
+                          width: 5,
+                        ),
+                        Text(
+                          task['time'],
+                          style: Theme.of(context)
+                              .textTheme
+                              .displaySmall!
+                              .copyWith(
+                                color: Colors.white,
+                                fontSize: 20,
+                              ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    Row(
+                      children: [
+                        const Icon(Icons.calendar_today, color: Colors.white),
+                        const SizedBox(
+                          width: 5,
+                        ),
+                        Text(
+                          task['date'],
+                          style: Theme.of(context)
+                              .textTheme
+                              .displaySmall!
+                              .copyWith(
+                                color: Colors.white,
+                                fontSize: 20,
+                              ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    Text(
+                      task["task"],
+                      style: Theme.of(context)
+                          .textTheme
+                          .displaySmall!
+                          .copyWith(color: Colors.white, fontSize: 20),
+                    ),
+                  ],
+                ),
+                const Spacer(),
+                Container(
+                  height: 100,
+                  width: 1,
+                  color: Colors.white,
+                ),
+                RotatedBox(
+                  quarterTurns: 3,
+                  child: Text(
+                    AppStrings.todo,
+                    style: Theme.of(context).textTheme.displayMedium!.copyWith(
+                          color: Colors.white,
+                        ),
                   ),
-                  Text(
-                    task['date'],
-                    style: const TextStyle(color: Colors.grey, fontSize: 18),
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
-            IconButton(
-              onPressed: () => TodoLayoutCubit.get(context)
-                  .updateItemDataBase(status: "done", id: task['id']),
-              icon: const Icon(
-                Icons.check_box,
-                color: Colors.green,
-              ),
-            ),
-            IconButton(
-              onPressed: () => TodoLayoutCubit.get(context)
-                  .updateItemDataBase(status: "archive", id: task['id']),
-              icon: const Icon(Icons.archive),
-            ),
-          ],
+          ),
         ),
       ),
     );
 
 Widget emptyTasks() => const Center(
       child: Column(
-        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(
-            Icons.hourglass_empty,
-            size: 200,
-            color: Colors.grey,
-          ),
-          SizedBox(
-            height: 20,
+          Image(
+            image: AssetImage(AppAssets.noTasks),
           ),
           Text(
-            "Empty tasks",
+            AppStrings.noTaskTitle,
             style: TextStyle(
-              fontSize: 50,
+              fontSize: 20,
+              color: Colors.grey,
+            ),
+          ),
+          Text(
+            AppStrings.noTaskSubTitle,
+            style: TextStyle(
+              fontSize: 20,
               color: Colors.grey,
             ),
           ),
@@ -158,5 +207,18 @@ void navigateTo({context, widget}) => Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => widget,
+      ),
+    );
+
+Widget commonTextButton({
+  required String text,
+  required TextStyle? textStyle,
+  required Function()? function,
+}) =>
+    TextButton(
+      onPressed: function,
+      child: Text(
+        text,
+        style: textStyle,
       ),
     );

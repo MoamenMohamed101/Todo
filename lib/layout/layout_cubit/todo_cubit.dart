@@ -51,7 +51,7 @@ class TodoLayoutCubit extends Cubit<TodoLayoutStates> {
         debugPrint("database created");
         dataBase
             .execute(
-                'CREATE TABLE tasks (id INTEGER PRIMARY KEY, title TEXT, date TEXT, time TEXT, status TEXT)')
+                'CREATE TABLE tasks (id INTEGER PRIMARY KEY, title TEXT, task TEXT, date TEXT, time TEXT, status TEXT)')
             .then((value) {
           debugPrint("tables created");
         }).catchError((error) {
@@ -70,12 +70,13 @@ class TodoLayoutCubit extends Cubit<TodoLayoutStates> {
 
   Future insertDataBase({
     required String title,
+    required String task,
     required String date,
     required String time,
   }) async {
     return await dataBase!.transaction((action) => action
             .rawInsert(
-                'INSERT INTO tasks (title,date,time,status) VALUES("$title","$date","$time","new")')
+                'INSERT INTO tasks (title,task,date,time,status) VALUES("$title","$task","$date","$time","new")')
             .then((value) {
           debugPrint("$value inserted successfully");
           getDataBase(dataBase);
