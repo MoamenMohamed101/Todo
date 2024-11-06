@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:todo/layout/layout_cubit/todo_cubit.dart';
 import 'package:todo/layout/layout_screen.dart';
 import 'package:todo/modules/splash_screen.dart';
 import 'package:todo/shared/network/local/get_helper.dart';
@@ -28,12 +29,19 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: lightTheme,
-      darkTheme: darkTheme,
-      themeMode: ThemeMode.light,
-      home: isOnBoarding ? LayoutScreen() : const SplashScreen(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => TodoLayoutCubit()..createDataBase(),
+        )
+      ],
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        theme: lightTheme,
+        darkTheme: darkTheme,
+        themeMode: ThemeMode.light,
+        home: isOnBoarding ? LayoutScreen() : const SplashScreen(),
+      ),
     );
   }
 }

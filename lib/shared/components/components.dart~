@@ -149,7 +149,7 @@ Widget buildTaskItem(Map task, BuildContext context) => InkWell(
           child: Card(
             clipBehavior: Clip.antiAliasWithSaveLayer,
             elevation: 5.0,
-            color: Colors.red,
+            color: Colors.pink,
             child: Padding(
               padding: const EdgeInsets.all(15.0),
               child: Row(

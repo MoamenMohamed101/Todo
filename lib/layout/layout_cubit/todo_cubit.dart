@@ -5,6 +5,7 @@ import 'package:todo/layout/layout_cubit/todo_states.dart';
 import 'package:todo/modules/archive_screen.dart';
 import 'package:todo/modules/done_screen.dart';
 import 'package:todo/modules/tasks_screen.dart';
+import 'package:todo/shared/components/components.dart';
 
 class TodoLayoutCubit extends Cubit<TodoLayoutStates> {
   TodoLayoutCubit() : super(TodoLayoutInitialState());
@@ -14,10 +15,13 @@ class TodoLayoutCubit extends Cubit<TodoLayoutStates> {
   List<Map> newTasks = [];
   List<Map> doneTasks = [];
   List<Map> archiveTasks = [];
+
   int currentIndex = 0;
   bool isBottomSheetShow = false;
   IconData isIcon = Icons.edit;
   Database? dataBase;
+  int myIndex = 0;
+
 
   late List<Widget> screens = [
     const TasksScreen(),
@@ -120,7 +124,7 @@ class TodoLayoutCubit extends Cubit<TodoLayoutStates> {
     dataBase!.rawDelete(
       'DELETE FROM tasks WHERE id = ?',
       [task],
-    ).then((onValue){
+    ).then((onValue) {
       getDataBase(dataBase);
       emit(TodoLayoutDeleteDataBaseSuccessState());
     });

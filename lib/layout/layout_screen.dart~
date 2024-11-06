@@ -1,12 +1,10 @@
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
-import 'package:date_picker_timeline/date_picker_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:todo/layout/layout_cubit/todo_cubit.dart';
 import 'package:todo/layout/layout_cubit/todo_states.dart';
 import 'package:todo/shared/components/components.dart';
-import 'package:todo/shared/styles/colors.dart';
 
 class LayoutScreen extends StatelessWidget {
   final List<BottomNavigationBarItem> items = [
@@ -31,73 +29,74 @@ class LayoutScreen extends StatelessWidget {
       dateController = TextEditingController(),
       titleController = TextEditingController();
 
+  int myIndex = 0;
+
   LayoutScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => TodoLayoutCubit()..createDataBase(),
-      child: BlocConsumer<TodoLayoutCubit, TodoLayoutStates>(
-        listener: (context, state) {
-          if (state is TodoLayoutInsertDataBaseSuccessState) {
-            Navigator.pop(context);
-          }
-        },
-        builder: (context, state) {
-          TodoLayoutCubit cubit = TodoLayoutCubit.get(context);
-          return Scaffold(
-            key: scaffoldKey,
-            appBar: AppBar(
-              title: Text(
-                cubit.titles[cubit.currentIndex],
-                style: Theme.of(context).textTheme.displaySmall,
-              ),
-              // actions: [
-              //   StreamBuilder<DateTime>(
-              //     stream: Stream.periodic(const Duration(seconds: 1), (_) => DateTime.now()),
-              //     builder: (context, snapshot) {
-              //       if (snapshot.hasData) {
-              //         return Padding(
-              //           padding: const EdgeInsets.only(right: 10),
-              //           child: Column(
-              //             crossAxisAlignment: CrossAxisAlignment.end,
-              //             children: [
-              //               Text(
-              //                 DateFormat.Hms().format(snapshot.data!),
-              //                 style: Theme.of(context).textTheme.displaySmall!.copyWith(
-              //                   fontSize: 20,
-              //                 ),
-              //               ),
-              //               Text(
-              //                 DateFormat.yMMMMd().format(snapshot.data!),
-              //                 style: Theme.of(context).textTheme.displaySmall!.copyWith(
-              //                   fontSize: 20,
-              //                 ),
-              //               ),
-              //             ],
-              //           ),
-              //         );
-              //       } else {
-              //         return const SizedBox();
-              //       }
-              //     },
-              //   ),
-              // ],
+    return BlocConsumer<TodoLayoutCubit, TodoLayoutStates>(
+      listener: (context, state) {
+        if (state is TodoLayoutInsertDataBaseSuccessState) {
+          Navigator.pop(context);
+        }
+      },
+      builder: (context, state) {
+        TodoLayoutCubit cubit = TodoLayoutCubit.get(context);
+        return Scaffold(
+          key: scaffoldKey,
+          appBar: AppBar(
+            title: Text(
+              cubit.titles[cubit.currentIndex],
+              style: Theme.of(context).textTheme.displaySmall,
             ),
-            floatingActionButton: FloatingActionButton(
-              onPressed: () {
-                if (cubit.isBottomSheetShow) {
-                  if (formKey.currentState!.validate()) {
-                    cubit.insertDataBase(
-                        title: titleController.text,
-                        date: dateController.text,
-                        time: timeController.text,
-                        task: tasksController.text);
-                  }
-                } else {
-                  scaffoldKey.currentState!
-                      .showBottomSheet(
-                        (builder) => Container(
+            // actions: [
+            //   StreamBuilder<DateTime>(
+            //     stream: Stream.periodic(const Duration(seconds: 1), (_) => DateTime.now()),
+            //     builder: (context, snapshot) {
+            //       if (snapshot.hasData) {
+            //         return Padding(
+            //           padding: const EdgeInsets.only(right: 10),
+            //           child: Column(
+            //             crossAxisAlignment: CrossAxisAlignment.end,
+            //             children: [
+            //               Text(
+            //                 DateFormat.Hms().format(snapshot.data!),
+            //                 style: Theme.of(context).textTheme.displaySmall!.copyWith(
+            //                   fontSize: 20,
+            //                 ),
+            //               ),
+            //               Text(
+            //                 DateFormat.yMMMMd().format(snapshot.data!),
+            //                 style: Theme.of(context).textTheme.displaySmall!.copyWith(
+            //                   fontSize: 20,
+            //                 ),
+            //               ),
+            //             ],
+            //           ),
+            //         );
+            //       } else {
+            //         return const SizedBox();
+            //       }
+            //     },
+            //   ),
+            // ],
+          ),
+          floatingActionButton: FloatingActionButton(
+            onPressed: () {
+              if (cubit.isBottomSheetShow) {
+                if (formKey.currentState!.validate()) {
+                  cubit.insertDataBase(
+                      title: titleController.text,
+                      date: dateController.text,
+                      time: timeController.text,
+                      task: tasksController.text);
+                }
+              } else {
+                scaffoldKey.currentState!
+                    .showBottomSheet(
+                      (builder) => StatefulBuilder(
+                        builder: (BuildContext context, void Function(void Function()) setState) => Container(
                           color: Colors.white,
                           padding: const EdgeInsets.all(20),
                           child: Form(
@@ -185,42 +184,87 @@ class LayoutScreen extends StatelessWidget {
                                   hintText: "Enter your task date",
                                   controller: dateController,
                                 ),
+                                const SizedBox(
+                                  height: 15,
+                                ),
+                                SizedBox(
+                                  height: 40,
+                                  child: ListView.separated(
+                                    scrollDirection: Axis.horizontal,
+                                    itemBuilder:
+                                        (BuildContext context, int index) {
+                                      return InkWell(
+                                        onTap: (){
+                                          setState(() {
+                                            myIndex = index;
+                                          });
+                                        },
+                                        child: CircleAvatar(
+                                          backgroundColor: getIndex(index: index),
+                                          radius: 20,
+                                          child: myIndex == index ? const Icon(
+                                            Icons.check,
+                                            color: Colors.white,
+                                          ) : null,
+                                        ),
+                                      );
+                                    },
+                                    separatorBuilder:
+                                        (BuildContext context, int index) =>
+                                    const SizedBox(
+                                      width: 20,
+                                    ),
+                                    itemCount: 6,
+                                  ),
+                                )
                               ],
                             ),
                           ),
                         ),
-                        elevation: 20,
-                      )
-                      .closed
-                      .then((value) {
-                    cubit.isBottomSheetShow = false;
-                    cubit.changeIcons();
-                  });
-                  cubit.isBottomSheetShow = true;
+                      ),
+                      elevation: 20,
+                    )
+                    .closed
+                    .then((value) {
+                  cubit.isBottomSheetShow = false;
                   cubit.changeIcons();
-                }
-              },
-              child: Icon(cubit.isIcon),
+                });
+                cubit.isBottomSheetShow = true;
+                cubit.changeIcons();
+              }
+            },
+            child: Icon(cubit.isIcon),
+          ),
+          bottomNavigationBar: BottomNavigationBar(
+            elevation: 5,
+            type: BottomNavigationBarType.fixed,
+            onTap: (index) => cubit.changeIndex(index),
+            items: items,
+            currentIndex: cubit.currentIndex,
+          ),
+          body: ConditionalBuilder(
+            condition: state is! TodoLayoutGetDataBaseLoadingState,
+            builder: (BuildContext context) {
+              return cubit.screens[cubit.currentIndex];
+            },
+            fallback: (BuildContext context) => const Center(
+              child: CircularProgressIndicator(),
             ),
-            bottomNavigationBar: BottomNavigationBar(
-              elevation: 5,
-              type: BottomNavigationBarType.fixed,
-              onTap: (index) => cubit.changeIndex(index),
-              items: items,
-              currentIndex: cubit.currentIndex,
-            ),
-            body: ConditionalBuilder(
-              condition: state is! TodoLayoutGetDataBaseLoadingState,
-              builder: (BuildContext context) {
-                return cubit.screens[cubit.currentIndex];
-              },
-              fallback: (BuildContext context) => const Center(
-                child: CircularProgressIndicator(),
-              ),
-            ),
-          );
-        },
-      ),
+          ),
+        );
+      },
     );
+  }
+}
+
+Color getIndex({int? index}) {
+  switch(index){
+    case 0: return Colors.red;
+    case 1: return Colors.green;
+    case 2: return Colors.grey;
+    case 3: return Colors.teal;
+    case 4: return Colors.pink;
+    case 5: return Colors.cyan;
+    default: return Colors.blue;
   }
 }
