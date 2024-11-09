@@ -16,7 +16,7 @@ class DoneScreen extends StatelessWidget {
           shrinkWrap: true,
            physics: const BouncingScrollPhysics(),
           itemBuilder: (BuildContext context, int index) {
-            return buildTaskItem(cubit.doneTasks[index], context);
+            return buildTaskItem(cubit.doneTasks[index], context,1);
           },
           itemCount: cubit.doneTasks.length,
         );

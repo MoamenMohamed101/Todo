@@ -4,20 +4,21 @@ import 'package:todo/layout/layout_cubit/todo_cubit.dart';
 import 'package:todo/layout/layout_cubit/todo_states.dart';
 import 'package:todo/shared/components/components.dart';
 
-class ArchiveScreen extends StatelessWidget {
-  const ArchiveScreen({super.key});
+class DoneScreen extends StatelessWidget {
+  const DoneScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<TodoLayoutCubit, TodoLayoutStates>(
       builder: (BuildContext context, state) {
         TodoLayoutCubit cubit = TodoLayoutCubit.get(context);
-        return cubit.archiveTasks.isEmpty ? emptyTasks() : ListView.builder(
-          physics: const BouncingScrollPhysics(),
+        return cubit.doneTasks.isEmpty ? emptyTasks() : ListView.builder(
+          shrinkWrap: true,
+           physics: const BouncingScrollPhysics(),
           itemBuilder: (BuildContext context, int index) {
-            return buildTaskItem(cubit.archiveTasks[index], context);
+            return buildTaskItem(cubit.doneTasks[index], context);
           },
-          itemCount: cubit.archiveTasks.length,
+          itemCount: cubit.doneTasks.length,
         );
       },
       listener: (BuildContext context, Object? state) {},

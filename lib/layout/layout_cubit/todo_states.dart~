@@ -4,9 +4,7 @@ class TodoLayoutInitialState extends TodoLayoutStates {}
 
 class TodoLayoutChangeIndexState extends TodoLayoutStates {}
 
-class TodoLayoutChangeDateSuccessState extends TodoLayoutStates {}
-
-class TodoLayoutChangeDateErrorState extends TodoLayoutStates {}
+class TodoLayoutChangeDateState extends TodoLayoutStates {}
 
 class TodoLayoutChangeColorIndexState extends TodoLayoutStates {}
 

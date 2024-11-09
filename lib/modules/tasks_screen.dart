@@ -1,6 +1,7 @@
 import 'package:date_picker_timeline/date_picker_timeline.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:todo/layout/layout_cubit/todo_cubit.dart';
 import 'package:todo/layout/layout_cubit/todo_states.dart';
 import 'package:todo/shared/components/components.dart';
@@ -18,12 +19,15 @@ class TasksScreen extends StatelessWidget {
           child: Column(
             children: [
               SizedBox(
-                height: 90,
+                height: 90.h,
                 child: DatePicker(
                   DateTime.now(),
-                  initialSelectedDate: DateTime.now(),
+                  initialSelectedDate: cubit.currentDate,
                   selectionColor: AppColors.primaryColorOfLight,
                   selectedTextColor: Colors.white,
+                  onDateChange: (DateTime newDate) {
+                    cubit.getSelectedDate(newDate);
+                  },
                 ),
               ),
               cubit.newTasks.isEmpty
@@ -32,7 +36,11 @@ class TasksScreen extends StatelessWidget {
                       shrinkWrap: true,
                       physics: const BouncingScrollPhysics(),
                       itemBuilder: (BuildContext context, int index) {
-                        return buildTaskItem(cubit.newTasks[index], context);
+                        return buildTaskItem(
+                          cubit.newTasks[index],
+                          context,
+                          cubit.myIndex,
+                        );
                       },
                       itemCount: cubit.newTasks.length,
                     ),

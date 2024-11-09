@@ -1,6 +1,7 @@
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:todo/layout/layout_cubit/todo_cubit.dart';
 import 'package:todo/layout/layout_cubit/todo_states.dart';
@@ -29,14 +30,14 @@ class LayoutScreen extends StatelessWidget {
       dateController = TextEditingController(),
       titleController = TextEditingController();
 
-
   LayoutScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<TodoLayoutCubit, TodoLayoutStates>(
       listener: (context, state) {
-        if (state is TodoLayoutInsertDataBaseSuccessState) {
+        if (state is TodoLayoutInsertDataBaseSuccessState ||
+            state is TodoLayoutUpdateDataBaseSuccessState) {
           Navigator.pop(context);
         }
       },
@@ -85,17 +86,26 @@ class LayoutScreen extends StatelessWidget {
             onPressed: () {
               if (cubit.isBottomSheetShow) {
                 if (formKey.currentState!.validate()) {
-                  cubit.insertDataBase(
-                      title: titleController.text,
-                      date: dateController.text,
-                      time: timeController.text,
-                      task: tasksController.text);
+                  cubit
+                      .insertDataBase(
+                    title: titleController.text,
+                    date: dateController.text,
+                    time: timeController.text,
+                    task: tasksController.text,
+                  )
+                      .then((onValue) {
+                    showToast(
+                        message: "Task added successfully",
+                        state: ToastStates.insert);
+                  });
                 }
               } else {
                 scaffoldKey.currentState!
                     .showBottomSheet(
                       (builder) => StatefulBuilder(
-                        builder: (BuildContext context, void Function(void Function()) setState) => Container(
+                        builder: (BuildContext context,
+                                void Function(void Function()) setState) =>
+                            Container(
                           color: Colors.white,
                           padding: const EdgeInsets.all(20),
                           child: Form(
@@ -116,8 +126,8 @@ class LayoutScreen extends StatelessWidget {
                                   hintText: "Enter the title",
                                   controller: titleController,
                                 ),
-                                const SizedBox(
-                                  height: 15,
+                                SizedBox(
+                                  height: 15.h,
                                 ),
                                 defaultTextFormField(
                                   validate: (value) {
@@ -132,8 +142,8 @@ class LayoutScreen extends StatelessWidget {
                                   hintText: "Enter your task",
                                   controller: tasksController,
                                 ),
-                                const SizedBox(
-                                  height: 15,
+                                SizedBox(
+                                  height: 15.h,
                                 ),
                                 defaultTextFormField(
                                   validate: (value) {
@@ -156,8 +166,8 @@ class LayoutScreen extends StatelessWidget {
                                   hintText: "Enter your task time",
                                   controller: timeController,
                                 ),
-                                const SizedBox(
-                                  height: 15,
+                                SizedBox(
+                                  height: 15.h,
                                 ),
                                 defaultTextFormField(
                                   onTap: () {
@@ -183,35 +193,38 @@ class LayoutScreen extends StatelessWidget {
                                   hintText: "Enter your task date",
                                   controller: dateController,
                                 ),
-                                const SizedBox(
-                                  height: 15,
+                                SizedBox(
+                                  height: 15.h,
                                 ),
                                 SizedBox(
-                                  height: 40,
+                                  height: 40.h,
                                   child: ListView.separated(
                                     scrollDirection: Axis.horizontal,
                                     itemBuilder:
                                         (BuildContext context, int index) {
                                       return InkWell(
-                                        onTap: (){
+                                        onTap: () {
                                           setState(() {
                                             cubit.myIndex = index;
                                           });
                                         },
                                         child: CircleAvatar(
-                                          backgroundColor: getIndex(index: index),
+                                          backgroundColor:
+                                              cubit.getIndex(index: index),
                                           radius: 20,
-                                          child: cubit.myIndex == index ? const Icon(
-                                            Icons.check,
-                                            color: Colors.white,
-                                          ) : null,
+                                          child: cubit.myIndex == index
+                                              ? const Icon(
+                                                  Icons.check,
+                                                  color: Colors.white,
+                                                )
+                                              : null,
                                         ),
                                       );
                                     },
                                     separatorBuilder:
                                         (BuildContext context, int index) =>
-                                    const SizedBox(
-                                      width: 20,
+                                            SizedBox(
+                                      width: 20.h,
                                     ),
                                     itemCount: 6,
                                   ),
@@ -253,17 +266,5 @@ class LayoutScreen extends StatelessWidget {
         );
       },
     );
-  }
-}
-
-Color getIndex({int? index}) {
-  switch(index){
-    case 0: return Colors.red;
-    case 1: return Colors.green;
-    case 2: return Colors.grey;
-    case 3: return Colors.teal;
-    case 4: return Colors.pink;
-    case 5: return Colors.cyan;
-    default: return Colors.blue;
   }
 }

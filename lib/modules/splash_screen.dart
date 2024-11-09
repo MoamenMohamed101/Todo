@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:todo/modules/onBoarding_screen.dart';
 import 'package:todo/shared/styles/app_assets.dart';
@@ -38,14 +39,16 @@ class _SplashScreenState extends State<SplashScreen> {
             const Image(
               image: AssetImage(AppAssets.appLogo),
             ),
-            const SizedBox(
-              height: 19,
+            SizedBox(
+              height: 19.h,
             ),
-            Text("UpTodo",
-                style: GoogleFonts.lato(
-                  fontSize: 40,
-                  fontWeight: FontWeight.w700,
-                ))
+            Text(
+              "UpTodo",
+              style: GoogleFonts.lato(
+                fontSize: 40,
+                fontWeight: FontWeight.w700,
+              ),
+            )
           ],
         ),
       ),

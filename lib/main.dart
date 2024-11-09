@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:todo/layout/layout_cubit/todo_cubit.dart';
 import 'package:todo/layout/layout_screen.dart';
 import 'package:todo/modules/splash_screen.dart';
@@ -35,12 +36,17 @@ class MyApp extends StatelessWidget {
           create: (context) => TodoLayoutCubit()..createDataBase(),
         )
       ],
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        theme: lightTheme,
-        darkTheme: darkTheme,
-        themeMode: ThemeMode.light,
-        home: isOnBoarding ? LayoutScreen() : const SplashScreen(),
+      child: ScreenUtilInit(
+        designSize: const Size(375, 812),
+        builder: (context , child){
+          return MaterialApp(
+            debugShowCheckedModeBanner: false,
+            theme: lightTheme,
+            darkTheme: darkTheme,
+            themeMode: ThemeMode.light,
+            home: isOnBoarding ? LayoutScreen() : const SplashScreen(),
+          );
+        },
       ),
     );
   }

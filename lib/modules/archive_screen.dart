@@ -12,14 +12,16 @@ class ArchiveScreen extends StatelessWidget {
     return BlocConsumer<TodoLayoutCubit, TodoLayoutStates>(
       builder: (BuildContext context, state) {
         TodoLayoutCubit cubit = TodoLayoutCubit.get(context);
-        return cubit.archiveTasks.isEmpty ? emptyTasks() : ListView.builder(
-          shrinkWrap: true,
-          physics: const BouncingScrollPhysics(),
-          itemBuilder: (BuildContext context, int index) {
-            return buildTaskItem(cubit.archiveTasks[index], context);
-          },
-          itemCount: cubit.archiveTasks.length,
-        );
+        return cubit.archiveTasks.isEmpty
+            ? emptyTasks()
+            : ListView.builder(
+                shrinkWrap: true,
+                physics: const BouncingScrollPhysics(),
+                itemBuilder: (BuildContext context, int index) {
+                  return buildTaskItem(cubit.archiveTasks[index], context, 2);
+                },
+                itemCount: cubit.archiveTasks.length,
+              );
       },
       listener: (BuildContext context, Object? state) {},
     );

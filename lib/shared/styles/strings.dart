@@ -4,6 +4,8 @@ class AppStrings {
   static const String back = 'back';
   static const String today = 'today';
   static const String todo = 'Todo';
+  static const String done = 'COMPLETED';
+  static const String archived = 'ARCHIVED';
   static const String taskCompleted = 'Task Completed';
   static const String taskDelete = 'Delete Task';
   static const String taskCancel = 'cancel';

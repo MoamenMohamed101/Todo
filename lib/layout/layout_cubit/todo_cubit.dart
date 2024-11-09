@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:todo/layout/layout_cubit/todo_states.dart';
 import 'package:todo/modules/archive_screen.dart';
@@ -22,6 +23,7 @@ class TodoLayoutCubit extends Cubit<TodoLayoutStates> {
   Database? dataBase;
   int myIndex = 0;
 
+  DateTime currentDate = DateTime.now();
 
   late List<Widget> screens = [
     const TasksScreen(),
@@ -35,9 +37,39 @@ class TodoLayoutCubit extends Cubit<TodoLayoutStates> {
     emit(TodoLayoutChangeIndexState());
   }
 
+  void changeColorIndex(int index) {
+    myIndex = index;
+    emit(TodoLayoutChangeColorIndexState());
+  }
+
   void changeIcons() {
     isBottomSheetShow ? isIcon = Icons.add : isIcon = Icons.edit;
     emit(TodoLayoutChangeIconState());
+  }
+
+  Color getIndex({int? index}) {
+    switch (index) {
+      case 0:
+        return Colors.red;
+      case 1:
+        return Colors.green;
+      case 2:
+        return Colors.grey;
+      case 3:
+        return Colors.teal;
+      case 4:
+        return Colors.pink;
+      case 5:
+        return Colors.cyan;
+      default:
+        return Colors.blue;
+    }
+  }
+
+  void getSelectedDate(DateTime date) {
+    currentDate = date;
+    emit(TodoLayoutChangeDateSuccessState());
+    getDataBase(dataBase);
   }
 
   // void changeIcons(bool isShow,IconData icon)
@@ -98,11 +130,11 @@ class TodoLayoutCubit extends Cubit<TodoLayoutStates> {
     archiveTasks.clear();
     dataBase!.rawQuery('SELECT * FROM tasks').then((onValue) {
       onValue.forEach((element) {
-        if (element['status'] == 'new') {
+        if (element['status'] == 'new' && element['date'] == DateFormat.yMMMMd().format(currentDate)) {
           newTasks.add(element);
         } else if (element['status'] == 'done') {
           doneTasks.add(element);
-        } else {
+        } else if (element['status'] == 'archive'){
           archiveTasks.add(element);
         }
       });
