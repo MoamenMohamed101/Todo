@@ -19,7 +19,7 @@ class TasksScreen extends StatelessWidget {
           child: Column(
             children: [
               SizedBox(
-                height: 90.h,
+                height: 100.h,
                 child: DatePicker(
                   DateTime.now(),
                   initialSelectedDate: cubit.currentDate,

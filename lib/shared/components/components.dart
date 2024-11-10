@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:todo/layout/layout_cubit/todo_cubit.dart';
-import 'package:todo/layout/layout_screen.dart';
 import 'package:todo/shared/styles/app_assets.dart';
 import 'package:todo/shared/styles/colors.dart';
 import 'package:todo/shared/styles/strings.dart';

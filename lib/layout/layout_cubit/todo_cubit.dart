@@ -3,10 +3,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:todo/layout/layout_cubit/todo_states.dart';
+import 'package:todo/models/task_model.dart';
 import 'package:todo/modules/archive_screen.dart';
 import 'package:todo/modules/done_screen.dart';
 import 'package:todo/modules/tasks_screen.dart';
-import 'package:todo/shared/components/components.dart';
+import 'package:todo/shared/network/local/local_notification_service.dart';
 
 class TodoLayoutCubit extends Cubit<TodoLayoutStates> {
   TodoLayoutCubit() : super(TodoLayoutInitialState());
@@ -24,6 +25,14 @@ class TodoLayoutCubit extends Cubit<TodoLayoutStates> {
   int myIndex = 0;
 
   DateTime currentDate = DateTime.now();
+
+  final TextEditingController tasksController = TextEditingController(),
+      timeController = TextEditingController(),
+      dateController = TextEditingController(),
+      titleController = TextEditingController();
+
+  late TimeOfDay scheduledTime;
+  late DateTime scheduledDate;
 
   late List<Widget> screens = [
     const TasksScreen(),
@@ -114,8 +123,18 @@ class TodoLayoutCubit extends Cubit<TodoLayoutStates> {
             .rawInsert(
                 'INSERT INTO tasks (title,task,date,time,status) VALUES("$title","$task","$date","$time","new")')
             .then((value) {
+
           debugPrint("$value inserted successfully");
           getDataBase(dataBase);
+          LocalNotificationService.scheduledNotification(
+              currentDate: scheduledDate,
+              scheduledTime: scheduledTime,
+              taskModel: TaskModel(
+                id: value,
+                title: titleController.text,
+                description: tasksController.text,
+              )
+          );
           emit(TodoLayoutInsertDataBaseSuccessState());
         }).catchError((error) {
           debugPrint("error will inserting $error");

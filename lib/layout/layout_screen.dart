@@ -25,10 +25,6 @@ class LayoutScreen extends StatelessWidget {
 
   final scaffoldKey = GlobalKey<ScaffoldState>(),
       formKey = GlobalKey<FormState>();
-  final TextEditingController tasksController = TextEditingController(),
-      timeController = TextEditingController(),
-      dateController = TextEditingController(),
-      titleController = TextEditingController();
 
   LayoutScreen({super.key});
 
@@ -88,15 +84,16 @@ class LayoutScreen extends StatelessWidget {
                 if (formKey.currentState!.validate()) {
                   cubit
                       .insertDataBase(
-                    title: titleController.text,
-                    date: dateController.text,
-                    time: timeController.text,
-                    task: tasksController.text,
+                    title: cubit.titleController.text,
+                    date: cubit.dateController.text,
+                    time: cubit.timeController.text,
+                    task: cubit.tasksController.text,
                   )
                       .then((onValue) {
                     showToast(
-                        message: "Task added successfully",
-                        state: ToastStates.insert);
+                      message: "Task added successfully",
+                      state: ToastStates.insert,
+                    );
                   });
                 }
               } else {
@@ -124,7 +121,7 @@ class LayoutScreen extends StatelessWidget {
                                   prefixIcon: Icons.title,
                                   radius: 10,
                                   hintText: "Enter the title",
-                                  controller: titleController,
+                                  controller: cubit.titleController,
                                 ),
                                 SizedBox(
                                   height: 15.h,
@@ -140,7 +137,7 @@ class LayoutScreen extends StatelessWidget {
                                   prefixIcon: Icons.task,
                                   radius: 10,
                                   hintText: "Enter your task",
-                                  controller: tasksController,
+                                  controller: cubit.tasksController,
                                 ),
                                 SizedBox(
                                   height: 15.h,
@@ -157,14 +154,15 @@ class LayoutScreen extends StatelessWidget {
                                       context: context,
                                       initialTime: TimeOfDay.now(),
                                     ).then((value) {
-                                      timeController.text =
+                                      cubit.timeController.text =
                                           value!.format(context).toString();
+                                      cubit.scheduledTime = value;
                                     });
                                     return null;
                                   },
                                   radius: 10,
                                   hintText: "Enter your task time",
-                                  controller: timeController,
+                                  controller: cubit.timeController,
                                 ),
                                 SizedBox(
                                   height: 15.h,
@@ -177,9 +175,8 @@ class LayoutScreen extends StatelessWidget {
                                       firstDate: DateTime.now(),
                                       lastDate: DateTime.parse("2030-01-01"),
                                     ).then((value) {
-                                      dateController.text = DateFormat.yMMMMd()
-                                          .format(value!)
-                                          .toString();
+                                      cubit.dateController.text = DateFormat.yMMMMd().format(value!).toString();
+                                      cubit.scheduledDate = value;
                                     });
                                     return null;
                                   },
@@ -191,7 +188,7 @@ class LayoutScreen extends StatelessWidget {
                                   prefixIcon: Icons.calendar_today,
                                   radius: 10,
                                   hintText: "Enter your task date",
-                                  controller: dateController,
+                                  controller: cubit.dateController,
                                 ),
                                 SizedBox(
                                   height: 15.h,
