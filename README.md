@@ -1,16 +1,22 @@
-# todo
+# Todo Application
 
-A new Flutter project.
+A cross-platform Todo application built with Flutter, allowing users to manage tasks seamlessly across Android, iOS, web, and desktop platforms.
 
-## Getting Started
+## Features
 
-This project is a starting point for a Flutter application.
+- **Add Tasks:** Quickly add new tasks with a simple and intuitive interface.
+- **Edit Tasks:** Modify existing tasks to keep your to-do list up to date.
+- **Delete Tasks:** Remove tasks that are no longer needed.
+- **Cross-Platform Support:** Available on Android, iOS, web, and desktop platforms.
 
-A few resources to get you started if this is your first Flutter project:
+## Screenshots
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+*Include screenshots of your application here to showcase its design and functionality.*
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Installation
+
+To run this project locally, ensure you have Flutter installed. Then, follow these steps:
+
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/MoamenMohamed101/Todo.git
